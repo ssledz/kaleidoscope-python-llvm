@@ -15,8 +15,8 @@ class Token(Enum):
 
 
 class Lexer:
-    def __init__(self, buffer: str):
-        self.__buffer = buffer
+    def __init__(self, buff: str):
+        self.__buffer = buff
         self.__buffer_cursor = 0
         self.__identifier_str = ''
         self.__num_val = 0
