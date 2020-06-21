@@ -2,7 +2,7 @@ import sys
 from typing import Union, Optional
 
 from ch01.lexer import Lexer, Token
-from .ast import *
+from ch02.kast import *
 
 BinOpPrecedence = {
     '<': 10,
@@ -13,9 +13,9 @@ BinOpPrecedence = {
 
 
 class Parser:
-    def __init__(self, buffer):
+    def __init__(self, lexer: Lexer = None):
         self.__cur_token = None
-        self.__lexer = Lexer(buffer)
+        self.__lexer = lexer or Lexer()
 
     @property
     def current_token(self) -> Union[Token, str]:
@@ -173,3 +173,12 @@ class Parser:
             proto = PrototypeAST(name="", args=[])
             return FunctionAST(proto=proto, body=expr)
         return None
+
+
+if __name__ == '__main__':
+    from ch01.readchar import BufferedCharReader
+
+    p = Parser(Lexer(BufferedCharReader('def bina(a b) a + b')))
+    p.next_token()
+    d = p.parse_definition()
+    print(d)

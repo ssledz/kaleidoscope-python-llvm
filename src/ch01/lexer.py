@@ -2,6 +2,8 @@ import sys
 from enum import Enum
 from typing import Optional, Union
 
+from ch01.readchar import CharReader, BufferedCharReader
+
 
 class Token(Enum):
     tok_eof = -1
@@ -15,9 +17,8 @@ class Token(Enum):
 
 
 class Lexer:
-    def __init__(self, buff: str):
-        self.__buffer = buff
-        self.__buffer_cursor = 0
+    def __init__(self, char_reader=None):
+        self._char_reader = char_reader or CharReader.new()
         self.__identifier_str = ''
         self.__num_val = 0
         self.__last_char = ' '
@@ -37,11 +38,7 @@ class Lexer:
         return self.__num_val
 
     def getchar(self) -> Optional[str]:
-        if self.__buffer_cursor >= len(self.__buffer):
-            return None
-        c = self.__buffer[self.__buffer_cursor]
-        self.__buffer_cursor += 1
-        return c
+        return self._char_reader.getchar()
 
     def __isnum(self) -> bool:
         return self.__last_char and (self.__last_char.isdigit() or self.__last_char == '.')
@@ -98,10 +95,11 @@ class Lexer:
 
 
 if __name__ == '__main__':
-    buffer = '\n'.join([l.rstrip() for l in sys.stdin])
-    print(f'str: {buffer}')
 
-    lexer = Lexer(buffer)
+    lexer = Lexer()
+
+    if len(sys.argv) == 2:
+        lexer = Lexer(BufferedCharReader(sys.argv[1]))
 
     t = lexer.gettok()
 
