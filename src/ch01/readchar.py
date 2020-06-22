@@ -44,4 +44,6 @@ class InteractiveCharReader(CharReader):
                 return None
         finally:
             termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+        if ord(ch) != 13:
+            print(ch, file=sys.stderr, end='', flush=True)
         return ch
