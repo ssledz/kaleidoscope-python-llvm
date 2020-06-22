@@ -31,7 +31,7 @@ class Parser:
 
     @staticmethod
     def log_error(message: str) -> Union[ExprAST, PrototypeAST, None]:
-        print('\n'+message, file=sys.stderr, flush=True)
+        print('\n' + message, file=sys.stderr, flush=True)
         return None
 
     def parse_expression(self) -> Optional[ExprAST]:
@@ -120,20 +120,14 @@ class Parser:
             ::= numberexpr
             ::= parenexpr
         """
-        # if self.current_token == Token.tok_identifier:
-        #     self.parse_identifier_expr()
-        # elif self.current_token == Token.tok_number:
-        #     self.parse_number_expr()
-        # elif self.current_token == '(':
-        #     self.parse_paren_expr()
-        # else:
-        #     self.log_error("unknown token when expecting an expression")
-
-        return {
-            Token.tok_identifier: self.parse_identifier_expr,
-            Token.tok_number: self.parse_number_expr,
-            '(': self.parse_paren_expr
-        }.get(self.current_token, lambda: self.log_error("unknown token when expecting an expression"))()
+        if self.current_token == Token.tok_identifier:
+            return self.parse_identifier_expr()
+        elif self.current_token == Token.tok_number:
+            return self.parse_number_expr()
+        elif self.current_token == '(':
+            return self.parse_paren_expr()
+        else:
+            return self.log_error("unknown token when expecting an expression")
 
     def parse_prototype(self) -> Optional[PrototypeAST]:
         """
