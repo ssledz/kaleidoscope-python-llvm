@@ -5,6 +5,7 @@ import tty
 from abc import ABC
 
 _EOF = 4
+_ENTER = 13
 
 
 class CharReader(ABC):
@@ -44,6 +45,6 @@ class InteractiveCharReader(CharReader):
                 return None
         finally:
             termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-        if ord(ch) != 13:
+        if ord(ch) != _ENTER:
             print(ch, file=sys.stderr, end='', flush=True)
         return ch
