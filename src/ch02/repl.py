@@ -19,7 +19,6 @@ def handle_top_level_expression():
     exp = p.parse_top_level_expr()
     if exp:
         info(f'\nEvaluate a top-level expression into an anonymous function: {exp}')
-        ready(True)
     else:
         ready()
         p.next_token()  # Skip token for error recovery
@@ -29,7 +28,6 @@ def handle_extern():
     ext = p.parse_extern()
     if ext:
         info(f'\nParsed an extern: {ext}')
-        ready(True)
     else:
         ready()
         p.next_token()  # Skip token for error recovery
@@ -39,7 +37,6 @@ def handle_definition():
     fn = p.parse_definition()
     if fn:
         info(f'\nParsed a function definition: {fn}')
-        ready(True)
     else:
         ready()
         p.next_token()  # Skip token for error recovery
@@ -51,6 +48,7 @@ def main_loop():
         if curr == Token.tok_eof:
             return
         elif curr == ';':
+            ready(True)
             p.next_token()
         elif curr == Token.tok_def:
             handle_definition()

@@ -21,7 +21,7 @@ class Lexer:
         self._char_reader = char_reader or CharReader.new()
         self.__identifier_str = ''
         self.__num_val = 0
-        self.__last_char = ' '
+        self.__last_char = None
 
     @property
     def identifier_str(self) -> str:
@@ -56,10 +56,13 @@ class Lexer:
         """
         :return: the next token from buffer.
         """
+
+        if not self.__last_char:
+            self.__last_char = self.getchar()
+
         # skip white spaces
         while self.__isspace():
             self.__last_char = self.getchar()
-
         if self.__isalpha():
             self.__identifier_str = self.__last_char
             self.__last_char = self.getchar()
@@ -71,7 +74,6 @@ class Lexer:
             if self.identifier_str == 'extern':
                 return Token.tok_extern
             return Token.tok_identifier
-
         if self.__isnum():
             num_str = ''
             while self.__isnum():
@@ -85,12 +87,11 @@ class Lexer:
                 self.__last_char = self.getchar()
             if self.__last_char:
                 return self.gettok()
-
         if not self.__last_char:
             return Token.tok_eof
 
         this_char = self.__last_char
-        self.__last_char = self.getchar()
+        self.__last_char = None
         return this_char
 
 
